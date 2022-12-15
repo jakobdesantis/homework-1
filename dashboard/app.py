@@ -9,6 +9,11 @@ from pathlib import Path
 import datetime as dt
 from datetime import datetime
 
+alt.data_transformers.disable_max_rows()
+
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 #-------------------
 # DATA
 
@@ -16,7 +21,6 @@ from datetime import datetime
 df = pd.read_csv('../data/external/data.csv')
 
 # Data transformation
-df['Date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
 #-----------
 df2 = df.drop(labels=range(5000, 250000), axis=0)
 #-----------
