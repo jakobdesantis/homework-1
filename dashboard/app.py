@@ -13,10 +13,19 @@ from datetime import datetime
 # DATA
 
 # Data import
-df = pd.read_csv('https://github.com/jakobdesantis/homework-1/blob/main/data/external/data.csv')
+df = pd.read_csv('../data/external/data.csv')
 
 # Data transformation
 df['Date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+#-----------
+df2 = df.drop(labels=range(5000, 250000), axis=0)
+#-----------
+df2["length"] = df2["content"].str.len()
+#----------
+df2['publish_date']= pd.to_datetime(df2['publish_date']).dt.date
+df2['publish_date'] = pd.to_datetime(df2['publish_date'])
+#-----------
+
 
 
 
@@ -33,7 +42,7 @@ chart_language = st.sidebar.multiselect('Select language', 0, 10, 1)
 # HEADER
 
 # Title of our app
-st.title("Verteilung der Sprachen")
+st.title("Allgemeiner Titel")
 # Add header
 st.header("This is my interactive app from team D")
 
@@ -41,8 +50,36 @@ st.header("This is my interactive app from team D")
 # BODY
 
 #-------------------
-# Show static DataFrame
-st.subheader("Show Data")
+# Häufigste Länder
+st.subheader("Häufigste Länder")
+st.write("Here's my data:")
+
+source = df2
+
+chart_region = alt.Chart(source).mark_arc(innerRadius=50).encode(
+    theta=alt.Theta("count(region)", type="quantitative"),
+    color=alt.Color("region", type="nominal")
+).properties(
+    title='Anteil der verschiedenen Länder',
+    width=400,
+    height=300
+)
+
+chart_region.configure_title(
+    fontSize=16,
+    font='Arial',
+    color='black',
+    anchor='middle'
+)
+
+c = chart_region
+
+# Show plot
+st.altair_chart(c, use_container_width=True)
+
+#-------------------
+# Verteilung der Sprachen
+st.subheader("Verteilung der Sprachen")
 st.write("Here's my data:")
 
 language_count = df2['language'].value_counts(normalize=True, sort=True)
@@ -75,13 +112,37 @@ chart_language.configure_title(
     color='black',
     anchor='middle'
 )
+c= chart_language
 
 # Show plot
 st.altair_chart(c, use_container_width=True)
 
 #-------------------
-# Show a map
-st.write("Plot a map")
-st.map(df_language)
+# Verteilung der Sprachen
+st.subheader("Verteilung der Sprachen")
+st.write("Here's my data:")
 
-#-------------------
+source = df2
+
+chart_followers = alt.Chart(source).mark_bar().encode(
+  x=alt.X('author',
+    sort='-y',
+    title="Account-Name"
+  ),
+  y=alt.Y('count(region)',
+    title="Anzahl Follower"
+  )
+).properties(
+    title='Accounts mit den meisten Followern',
+    width=800,
+    height=300
+)
+
+chart_followers.configure_title(
+    fontSize=16,
+    font='Arial',
+    color='black',
+    anchor='middle'
+)
+
+
