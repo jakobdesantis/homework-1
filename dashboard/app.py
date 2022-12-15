@@ -36,7 +36,7 @@ df2['publish_date'] = pd.to_datetime(df2['publish_date'])
 # SIDEBAR
 
 # Make a chart_language
-chart_language = st.sidebar.multiselect('Select language', 0, 10, 1)
+chart_language = st.sidebar.multiselect('Wie schätzt du deine Bildschirmzeit pro Tag ein?', 0, 10, 1)
 
 #-------------------
 # HEADER
@@ -71,11 +71,11 @@ chart_region.configure_title(
     color='black',
     anchor='middle'
 )
-
 c = chart_region
 
 # Show plot
 st.altair_chart(c, use_container_width=True)
+
 
 #-------------------
 # Verteilung der Sprachen
@@ -117,9 +117,10 @@ c= chart_language
 # Show plot
 st.altair_chart(c, use_container_width=True)
 
+
 #-------------------
-# Verteilung der Sprachen
-st.subheader("Verteilung der Sprachen")
+# Followerverteilung
+st.subheader("Followerverteilung")
 st.write("Here's my data:")
 
 source = df2
@@ -144,5 +145,73 @@ chart_followers.configure_title(
     color='black',
     anchor='middle'
 )
+c= chart_followers
+
+# Show plot
+st.altair_chart(c, use_container_width=True)
+
+
+#-------------------
+# Zusammenhang Tweetlänge und Anzahl Follower
+st.subheader("Zusammenhang Tweetlänge und Anzahl Follower")
+st.write("Here's my data:")
+
+source = df2
+
+chart_length = alt.Chart(source).mark_point().encode(
+    x=alt.X('length',
+        title="Tweet-Länge (Zeichen)"
+    ),
+    y=alt.Y('followers',
+        title="Anzahl der Follower des postenden Accoutns"
+    )
+).properties(
+    title='Anzahl der Follower im Zusammenhang mit der Tweet-Länge',
+    width=800,
+    height=300
+)
+
+chart_length.configure_title(
+    fontSize=16,
+    font='Arial',
+    color='black',
+    anchor='middle'
+)
+c= chart_length
+
+# Show plot
+st.altair_chart(c, use_container_width=True)
+
+
+#-------------------
+# Posts je nach Zeit
+st.subheader("Posts je nach Zeit")
+st.write("Here's my data:")
+
+source = df2
+
+chart_time = alt.Chart(source).mark_line().encode(
+    x=alt.X("publish_date",
+        title="Datum"
+    ),
+    y=alt.Y("count(publish_date)",
+        title="Anzahl der Tweets"
+    )
+).properties(
+    title='Anzahl der Tweets pro Tag',
+    width=800,
+    height=300
+)
+
+chart_time.configure_title(
+    fontSize=16,
+    font='Arial',
+    color='black',
+    anchor='middle'
+)
+c= chart_time
+
+# Show plot
+st.altair_chart(c, use_container_width=True)
 
 
