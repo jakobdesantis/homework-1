@@ -6,13 +6,10 @@ import pandas as pd
 import altair as alt
 
 from pathlib import Path
-import datetime as dt
-from datetime import datetime
+# import datetime as dt
+# from datetime import datetime
 
-alt.data_transformers.disable_max_rows()
-
-import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
+# alt.data_transformers.disable_max_rows()
 
 #-------------------
 # DATA
@@ -28,10 +25,6 @@ df2["length"] = df2["content"].str.len()
 #----------
 df2['publish_date']= pd.to_datetime(df2['publish_date']).dt.date
 df2['publish_date'] = pd.to_datetime(df2['publish_date'])
-#-----------
-
-
-
 
 #-------------------
 # START OF APP
@@ -39,7 +32,7 @@ df2['publish_date'] = pd.to_datetime(df2['publish_date'])
 #-------------------
 # SIDEBAR
 
-# Make a chart_language
+# Make a sidebar
 chart_language = st.sidebar.multiselect('Wie schätzt du deine Bildschirmzeit pro Tag ein?', 0, 10, 1)
 
 #-------------------
