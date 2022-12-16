@@ -10,16 +10,8 @@ from pathlib import Path
 import datetime as dt
 from datetime import datetime
 
-alt.data_transformers.disable_max_rows()
-
-import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
-
 #-------------------
 # DATA
-
-# Obtain home path
-home_path = str(Path.home())
 
 # Data import
 #df = pd.read_csv('/Users/User/Documents/GitHub/homework-1/data/external/data.csv')
