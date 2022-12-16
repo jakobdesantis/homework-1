@@ -13,7 +13,7 @@ from datetime import datetime
 # DATA
 
 # Data import
-df = pd.read_csv('../data/external/data.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data.csv?token=GHSAT0AAAAAABZZVTDR3JS2ALCI3TVE6LKYY44MNDA')
 
 
 # Data transformation
@@ -33,6 +33,7 @@ df2['publish_date'] = pd.to_datetime(df2['publish_date'])
 
 # Make a sidebar
 chart_language = st.sidebar.multiselect('Wie schätzt du deine Bildschirmzeit pro Tag ein?', 0, 10, 1)
+#Text noch bearbeiten
 
 #-------------------
 # HEADER
@@ -71,3 +72,5 @@ c = chart_region
 
 # Show plot
 st.altair_chart(c, use_container_width=True)
+
+#restliche Graphen einfügen (in anderer Datei vorbeireitet)
