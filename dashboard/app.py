@@ -13,8 +13,7 @@ from datetime import datetime
 # DATA
 
 # Data import
-df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data.csv?token=GHSAT0AAAAAABZZVTDR3JS2ALCI3TVE6LKYY44MNDA')
-
+df = pd.read_csv('\Users\User\Documents\Studium\Medienmanagement\HdM Stuttgart\Semester 4\BigData\data.csv')
 
 # Data transformation
 #-----------
