@@ -2,16 +2,19 @@
 # SETUP
 import streamlit as st
 
-import numpy as np
+#import numpy as np
 import pandas as pd
 import altair as alt
 
 from pathlib import Path
-import datetime as dt
-from datetime import datetime
+#import datetime as dt
+#from datetime import datetime
 
 #-------------------
 # DATA
+
+# Obtain home path
+home_path = str(Path.home())
 
 # Data import
 #df = pd.read_csv('C:\Users\User\Documents\Studium\Medienmanagement\HdM Stuttgart\Semester 4\BigData\data.csv')
@@ -36,9 +39,15 @@ df2['publish_date'] = pd.to_datetime(df2['publish_date'])
 #-------------------
 # SIDEBAR
 
+# Header
+st.sidebar.header("This is my sidebar")
+
 # Make a sidebar
 chart_language = st.sidebar.multiselect('Wie schätzt du deine Bildschirmzeit pro Tag ein?', 0, 10, 1)
 #Text noch bearbeiten
+
+# Show output of slider selection
+st.sidebar.write("My life satisfaction is around ", chart_language, 'points')
 
 #-------------------
 # HEADER
