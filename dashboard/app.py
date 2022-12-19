@@ -18,18 +18,15 @@ from datetime import datetime
 #df = pd.read_csv('../data/external/data2.csv')
 #df = pd.read_csv('C:/Users/User/Documents/GitHub/homework-1/data/external/data.csv')
 #df = pd.read_csv('C:\Users\User\Downloads\homework-1-main\homework-1-main\data\external\data.csv')
-<<<<<<< Updated upstream
 #df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data.csv')
 #df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data2.csv')
-df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data3.csv')
-=======
-df = pd.read_csv('https://github.com/jakobdesantis/homework-1/blob/main/data/external/data.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data.csv?token=GHSAT0AAAAAABZZVTDROHOMKD4MZSBLNI2QY445DAQ')
->>>>>>> Stashed changes
+#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data3.csv')
+df = pd.read_csv('../data/external/data2.csv')
+df2 = df
 
 
 # Data transformation
-df['Date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+#df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
 #-----------
 df2["length"] = df2["content"].str.len()
 #----------
