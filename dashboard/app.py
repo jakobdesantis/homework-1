@@ -88,32 +88,20 @@ c = chart_region
 # Show plot
 st.altair_chart(c, use_container_width=True)
 
+
 #-------------------
-# Verteilung der Sprachen
-st.subheader("Verteilung der Sprachen")
+# Häufigste Sprachen
+st.subheader("Häufigste Sprachen")
 st.write("Here's my data:")
 
-language_count = df2['language'].value_counts(normalize=True, sort=True)
-df_language = language_count.to_frame()
-df_language = df_language.rename_axis("Language")
-df_language = df_language.reset_index()
-df_language.columns = ["language", "percentage"]
-df_language['percentage'] = df_language['percentage'].multiply(100)
+source = df2
 
-source = df_language
-
-chart_language = alt.Chart(source).mark_bar().encode(
-  x=alt.X('language',
-    sort='-y',
-    title="Sprache"
-  ),
-  y=alt.Y('percentage',
-    title="Anteil in %"
-  ),
-  color=alt.Color("language:N", type="nominal")
+chart_language = alt.Chart(source).mark_arc(innerRadius=50).encode(
+    theta=alt.Theta("count(language)", type="quantitative"),
+    color=alt.Color("language", type="nominal", title='Sprachen')
 ).properties(
-    title='Verteilung der Sprachen',
-    width=600,
+    title='Anteil der verschiedenen Sprachen',
+    width=400,
     height=300
 )
 
@@ -138,16 +126,23 @@ source = df2
 
 chart_followers = alt.Chart(source).mark_bar().encode(
   x=alt.X('author',
-    sort='-y',
-    title="Account-Name"
+    title="Account-Name",
+    sort="-y"
   ),
-  y=alt.Y('count(region)',
+  y=alt.Y('max(following)',
     title="Anzahl Follower"
+  ),
+  color=alt.Color("author",
+    type="nominal",
+    title='Account',
+    legend=None),
+  tooltip=(
+        alt.Tooltip("max(following)", title="Follower")
   )
 ).properties(
     title='Accounts mit den meisten Followern',
     width=800,
-    height=300
+    height=300,
 )
 
 chart_followers.configure_title(
@@ -163,38 +158,6 @@ st.altair_chart(c, use_container_width=True)
 
 
 #-------------------
-# Zusammenhang Tweetlänge und Anzahl Follower
-st.subheader("Zusammenhang Tweetlänge und Anzahl Follower")
-st.write("Here's my data:")
-
-source = df2
-
-chart_length = alt.Chart(source).mark_point().encode(
-    x=alt.X('length',
-        title="Tweet-Länge (Zeichen)"
-    ),
-    y=alt.Y('followers',
-        title="Anzahl der Follower des postenden Accoutns"
-    )
-).properties(
-    title='Anzahl der Follower im Zusammenhang mit der Tweet-Länge',
-    width=800,
-    height=300
-)
-
-chart_length.configure_title(
-    fontSize=16,
-    font='Arial',
-    color='black',
-    anchor='middle'
-)
-c= chart_length
-
-# Show plot
-st.altair_chart(c, use_container_width=True)
-
-
-#-------------------
 # Posts je nach Zeit
 st.subheader("Posts je nach Zeit")
 st.write("Here's my data:")
@@ -202,11 +165,14 @@ st.write("Here's my data:")
 source = df2
 
 chart_time = alt.Chart(source).mark_line().encode(
-    x=alt.X("publish_date",
+    x=alt.X("date",
         title="Datum"
     ),
-    y=alt.Y("count(publish_date)",
+    y=alt.Y("count(date)",
         title="Anzahl der Tweets"
+    ),
+    tooltip=(
+        alt.Tooltip("count(date)", title="Anzahl der Tweets")
     )
 ).properties(
     title='Anzahl der Tweets pro Tag',
@@ -224,3 +190,43 @@ c= chart_time
 
 # Show plot
 st.altair_chart(c, use_container_width=True)
+
+
+#-------------------
+# Tweets nach Wochentag und Uhrzeit
+st.subheader("Tweets nach Wochentag und Uhrzeit")
+st.write("Here's my data:")
+
+source = df2
+
+heatmap = alt.Chart(df2).mark_rect().encode(
+    x=alt.X("hour",
+        title="Uhrzeit"
+    ),
+    y=alt.Y('weekday_name',
+            title="Wochentag",
+            type='nominal',
+            sort=weekday_names
+           ),
+    color=alt.Color("count(weekday_name)",
+    legend=None),
+    tooltip=(
+        alt.Tooltip("count(weekday_name)", title="Anzahl der Tweets")
+    )
+).properties(
+    title='Tweets nach Wochentag und Uhrzeit',
+    width=1000,
+    height=300
+)
+
+heatmap.configure_title(
+    fontSize=16,
+    font='Arial',
+    color='black',
+    anchor='middle'
+)
+c= heatmap
+
+# Show plot
+st.altair_chart(c, use_container_width=True)
+
