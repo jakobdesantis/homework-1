@@ -45,8 +45,8 @@ df['publish_date'] = pd.to_datetime(df['publish_date'], format='%m/%d/%Y %H:%M')
 st.sidebar.header("Hier sehen Sie unsere Sidebar")
 
 # Make a sidebar
-#Individuelle Konfrontation = st.sidebar.multiselect('Wurdest du schon mit einem russischen Troll-Tweet konfronitiert?', Ja, Nein)
-chart_region = st.sidebar.multiselect('Select region', df['region'].unique().tolist())
+Individuelle Konfrontation = st.sidebar.multiselect('Wurdest du schon mit einem russischen Troll-Tweet konfronitiert?', Ja, Nein)
+#chart_region = st.sidebar.multiselect('Select region', df['region'].unique().tolist())
 
 # Show output of slider selection
 #st.sidebar.write("buhbh")
@@ -66,7 +66,7 @@ st.write("Der Datensatz enthält knapp 3 Millionen russische Troll-Tweets, die z
 #-------------------
 # Häufigste Länder
 st.subheader("Länder mit den meist gesendeten Tweets")
-st.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche Länder sind dabei und wir häufig wurde aus ihnen getweetet?")
+st.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche Länder sind dabei und wie häufig wurde aus ihnen getweetet?")
 st.write("Mit dem Land als einzige kategoriale Variable kann ein Donut-Diagramm die Verhältnisse gut darstellen.")
 
 chart_region = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
@@ -125,7 +125,7 @@ st.altair_chart(c, use_container_width=True)
 
 #-------------------
 # Followerverteilung
-st.subheader("Followerverteilung der russischen Trolltweets")
+st.subheader("Followerverteilung")
 st.write("Wie groß ist das Publikum der Troll-Accounts?")
 st.write("Gibt es Accounts mit besonders vielen Followern?")
 st.write("Die Anzahl der Follower ist eine einzige numerische Variable, die wir diesmal als Balkendiagramm darstellen.")
@@ -170,6 +170,7 @@ st.write("Gibt es Zeiträume, in denen die Troll-Konten besonders aktiv waren?")
 st.write("Diese Frage lässt sich mit der Anzahl der Tweets pro Tag erkennen.")
 st.write("Beim Datum und der Anzahl der Tweets pro Tag handelt sich um zwei numerische Variablen.")
 st.write("Diese Auswertung veranschaulichen wir im Folgenden als Liniendiagramm.")
+st.write("Die Anzahl der Posts soll im Intervall von je einem Tag angezeigt werden:")
 
 df['date'] = pd.to_datetime(df['publish_date'].dt.date)
 
