@@ -58,14 +58,16 @@ st.sidebar.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche 
 st.title("Auswertung von russischen Trolltweets")
 # Add header
 st.header("Das ist die interaktive App von der Gruppe D")
+st.write("Der Datensatz enthält knapp 3 Millionen russische Troll-Tweets, die zwischen Februar 2012 und Mai 2018 veröffentlicht wurden. Da der ursprüngliche Datensatz sehr umfangreich ist, wird im Folgenden nur ein Ausschnitt von knapp 5.000 Tweets analysiert.")
 
 #-------------------
 # BODY
 
 #-------------------
 # Häufigste Länder
-st.subheader("Häufigste Länder")
-st.write("Here's my data:")
+st.subheader("Länder mit den meist gesendeten Tweets")
+st.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche Länder sind dabei und wir häufig wurde aus ihnen getweetet?")
+st.write("Mit dem Land als einzige kategoriale Variable kann ein Donut-Diagramm die Verhältnisse gut darstellen.")
 
 chart_region = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
     theta=alt.Theta("count(region)", type="quantitative"),
@@ -93,8 +95,9 @@ st.altair_chart(c, use_container_width=True)
 
 #-------------------
 # Häufigste Sprachen
-st.subheader("Häufigste Sprachen")
-st.write("Here's my data:")
+st.subheader("Tweets mit den häufigsten Sprachen")
+st.write("Welche Sprachen sind besonders stark vertreten?")
+st.write("Hier ist die einzige kategoriale Variable die Sprache. Erneut haben wir uns für ein Donut-Diagramm entschieden.")
 
 chart_language = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
     theta=alt.Theta("count(language)", type="quantitative"),
@@ -122,8 +125,10 @@ st.altair_chart(c, use_container_width=True)
 
 #-------------------
 # Followerverteilung
-st.subheader("Followerverteilung")
-st.write("Here's my data:")
+st.subheader("Followerverteilung der russischen Trolltweets")
+st.write("Wie groß ist das Publikum der Troll-Accounts?")
+st.write("Gibt es Accounts mit besonders vielen Followern?")
+st.write("Die Anzahl der Follower ist eine einzige numerische Variable, die wir diesmal als Balkendiagramm darstellen.")
 
 chart_followers = alt.Chart(df).mark_bar().encode(
   x=alt.X('author',
@@ -160,8 +165,11 @@ st.altair_chart(c, use_container_width=True)
 
 #-------------------
 # Posts je nach Zeit
-st.subheader("Posts je nach Zeit")
-st.write("Here's my data:")
+st.subheader("Posts nach Datum")
+st.write("Gibt es Zeiträume, in denen die Troll-Konten besonders aktiv waren?")
+st.write("Diese Frage lässt sich mit der Anzahl der Tweets pro Tag erkennen.")
+st.write("Beim Datum und der Anzahl der Tweets pro Tag handelt sich um zwei numerische Variablen.")
+st.write("Diese Auswertung veranschaulichen wir im Folgenden als Liniendiagramm.")
 
 df['date'] = pd.to_datetime(df['publish_date'].dt.date)
 
@@ -195,8 +203,11 @@ st.altair_chart(chart_time, use_container_width=True)
 
 #-------------------
 # Tweets nach Wochentag und Uhrzeit
-st.subheader("Tweets nach Wochentag und Uhrzeit")
-st.write("Here's my data:")
+st.subheader("Posts nach Wochentag und Uhrzeit")
+st.write("Zu welchen Wochentagen und Uhrzeiten waren die Konten besonders aktiv?")
+st.write("Dazu benötigen wir drei Werte: Den Wochentag, die Uhrzeit (Einheit: Stunde) und die Anzahl der Tweets pro Wochentag und Uhrzeit.")
+st.write("Die Anzahl der Tweets und die Uhrzeit sind numerische Variablen, der Wochentag ist jedoch eine kategoriale Variable.")
+st.write("Diese Kombination stellen wir in einer Heatmap dar.")
 
 df['hour'] = df['publish_date'].dt.hour
 df['weekday'] = df['publish_date'].dt.weekday
