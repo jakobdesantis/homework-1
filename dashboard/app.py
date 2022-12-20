@@ -157,39 +157,7 @@ c= chart_followers
 st.altair_chart(c, use_container_width=True)
 
 
-#-------------------
-# Posts je nach Zeit
-st.subheader("Posts je nach Zeit")
-st.write("Here's my data:")
 
-source = df2
-
-chart_time = alt.Chart(source).mark_line().encode(
-    x=alt.X("date",
-        title="Datum"
-    ),
-    y=alt.Y("count(date)",
-        title="Anzahl der Tweets"
-    ),
-    tooltip=(
-        alt.Tooltip("count(date)", title="Anzahl der Tweets")
-    )
-).properties(
-    title='Anzahl der Tweets pro Tag',
-    width=800,
-    height=300
-)
-
-chart_time.configure_title(
-    fontSize=16,
-    font='Arial',
-    color='black',
-    anchor='middle'
-)
-c= chart_time
-
-# Show plot
-st.altair_chart(c, use_container_width=True)
 
 #-------------------
 # Tweets nach Wochentag und Uhrzeit
