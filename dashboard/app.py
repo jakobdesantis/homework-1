@@ -48,7 +48,8 @@ df['weekday_name'] = df['weekday'].replace(range(7), weekday_names)
 st.sidebar.header("Hier sehen Sie unsere Sidebar")
 
 # Make a sidebar
-Individuelle Konfrontation = st.sidebar.multiselect('Wurdest du schon mit einem russischen Troll-Tweet konfronitiert?', Ja, Nein)
+Individuelle Befragung = st.sidebar.multiselect('Wurden Sie schon mit einem russischen Troll-Tweet konfrontiert?', Ja, Nein)
+#Individuelle Befragung zu Troll-Tweets = st.sidebar.multiselect('Wie oft wurden Sie schon mit einem russischen Troll-Tweet konfronitiert? Geben Sie Ihre Antwort auf einer Skala von 1 bis 10 an, wobei 0 für keine Konfrontation und 10 für eine sehr hohe Konfrontation steht.', 0, 10, 1)
 #chart_region = st.sidebar.multiselect('Select region', df['region'].unique().tolist())
 
 # Show output of slider selection
@@ -121,10 +122,10 @@ st.altair_chart(chart_language, use_container_width=True)
 
 
 #-------------------
-# Followerverteilung
-st.subheader("Followerverteilung")
+# Follower-Verteilung
+st.subheader("Follower-Verteilung")
 st.write("Wie groß ist das Publikum der Troll-Accounts?")
-st.write("Gibt es Accounts mit besonders vielen Followern?")
+st.write("Gibt es Accounts mit besonders vielen Follower?")
 st.write("Die Anzahl der Follower ist eine einzige numerische Variable, die wir diesmal als Balkendiagramm darstellen.")
 
 chart_followers = alt.Chart(df).mark_bar().encode(
@@ -158,25 +159,21 @@ st.altair_chart(chart_followers, use_container_width=True)
 
 
 #-------------------
-# Posts je nach Zeit
-st.subheader("Posts nach Datum")
+# Posts nach Datum und Region
+st.subheader("Posts nach Datum und Region")
 st.write("Gibt es Zeiträume, in denen die Troll-Konten besonders aktiv waren?")
 st.write("Diese Frage lässt sich mit der Anzahl der Tweets pro Tag erkennen.")
 st.write("Beim Datum und der Anzahl der Tweets pro Tag handelt sich um zwei numerische Variablen.")
 st.write("Diese Auswertung veranschaulichen wir im Folgenden als Liniendiagramm.")
 st.write("Die Anzahl der Posts soll im Intervall von je einem Tag angezeigt werden:")
 
-date_range_select = alt.selection_interval(name="Date Range")
+df['date'] = pd.to_datetime(df['publish_date'].dt.date)
 
 chart_time = alt.Chart(df.dropna()).mark_line().encode(
     x=alt.X("date", title="Datum"),
     y=alt.Y("count(date)", title="Anzahl der Tweets"),
     color=alt.Color("region", title="Region"),
     tooltip=alt.Tooltip("count(date)", title="Anzahl der Tweets")
-).add_selection(
-    date_range_select
-).transform_filter(
-    date_range_select
 ).properties(
     title='Anzahl der Tweets pro Tag',
     width=800,
@@ -201,6 +198,7 @@ st.write("Zu welchen Wochentagen und Uhrzeiten waren die Konten besonders aktiv?
 st.write("Dazu benötigen wir drei Werte: Den Wochentag, die Uhrzeit (Einheit: Stunde) und die Anzahl der Tweets pro Wochentag und Uhrzeit.")
 st.write("Die Anzahl der Tweets und die Uhrzeit sind numerische Variablen, der Wochentag ist jedoch eine kategoriale Variable.")
 st.write("Diese Kombination stellen wir in einer Heatmap dar.")
+st.write("Dafür werden zuerst zwei weitere Spalten „hour“ und „weekday“ erstellt."
 
 region_select = alt.binding_select(options=df["region"].dropna().unique())
 region_select_widget = alt.selection_single(bind=region_select, name="Region")
