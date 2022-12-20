@@ -42,20 +42,20 @@ df['publish_date'] = pd.to_datetime(df['publish_date'], format='%m/%d/%Y %H:%M')
 # SIDEBAR
 
 # Header
-st.sidebar.header("Das ist unsere Sidebar")
+st.sidebar.header("Hier sehen Sie unsere Sidebar")
 
 # Make a sidebar
-#chart_language = st.sidebar.multiselect('Wie schätzt du deine Bildschirmzeit pro Tag ein?', 0, 10, 1)
-chart_language = st.sidebar.multiselect('Select language', df['language'].unique().tolist())
+#Individuelle Konfrontation = st.sidebar.multiselect('Wurdest du schon mit einem russischen Troll-Tweet konfronitiert?', Ja, Nein)
+chart_region = st.sidebar.multiselect('Select region', df['region'].unique().tolist())
 
 # Show output of slider selection
-st.sidebar.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche Länder sind dabei und wir häufig wurde aus ihnen getweetet? Mit dem Land als einzige kategoriale Variable kann ein Donut-Diagramm die Verhältnisse gut darstellen.")
+#st.sidebar.write("buhbh")
 
 #-------------------
 # HEADER
 
 # Title of our app
-st.title("Auswertung von russischen Trolltweets")
+st.title("Auswertung von russischen Troll-Tweets")
 # Add header
 st.header("Das ist die interaktive App von der Gruppe D")
 st.write("Der Datensatz enthält knapp 3 Millionen russische Troll-Tweets, die zwischen Februar 2012 und Mai 2018 veröffentlicht wurden. Da der ursprüngliche Datensatz sehr umfangreich ist, wird im Folgenden nur ein Ausschnitt von knapp 5.000 Tweets analysiert.")
