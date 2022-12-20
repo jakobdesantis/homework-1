@@ -54,9 +54,9 @@ st.sidebar.write("My life satisfaction is around ", chart_language, 'points')
 # HEADER
 
 # Title of our app
-st.title("Allgemeiner Titel")
+st.title("Auswertung von russischen Trolltweets")
 # Add header
-st.header("This is my interactive app from team D")
+st.header("Das ist die interaktive App von der Gruppe D")
 
 #-------------------
 # BODY
@@ -190,7 +190,6 @@ c= chart_time
 
 # Show plot
 st.altair_chart(c, use_container_width=True)
-
 
 #-------------------
 # Tweets nach Wochentag und Uhrzeit
