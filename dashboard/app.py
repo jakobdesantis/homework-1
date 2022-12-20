@@ -26,13 +26,14 @@ df2 = df
 
 
 # Data transformation
-#df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+df.drop(df.columns[[0, 1, 2, 3, 5, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]], axis=1, inplace=True)
+df['publish_date'] = pd.to_datetime(df['publish_date'], format='%m/%d/%Y %H:%M')
 #-----------
-df2["length"] = df2["content"].str.len()
+#df2["length"] = df2["content"].str.len()
 #----------
-df2['publish_date']= pd.to_datetime(df2['publish_date']).dt.date
-df2['publish_date'] = pd.to_datetime(df2['publish_date'])
-df2['date'] = pd.to_datetime(df2['publish_date'].dt.date)
+#df2['publish_date']= pd.to_datetime(df2['publish_date']).dt.date
+#df2['publish_date'] = pd.to_datetime(df2['publish_date'])
+#df2['date'] = pd.to_datetime(df2['publish_date'].dt.date)
 
 #-------------------
 # START OF APP
@@ -41,15 +42,14 @@ df2['date'] = pd.to_datetime(df2['publish_date'].dt.date)
 # SIDEBAR
 
 # Header
-st.sidebar.header("This is my sidebar")
+st.sidebar.header("Das ist unsere Sidebar")
 
 # Make a sidebar
 #chart_language = st.sidebar.multiselect('Wie schätzt du deine Bildschirmzeit pro Tag ein?', 0, 10, 1)
 chart_language = st.sidebar.multiselect('Select language', df['language'].unique().tolist())
-#Text noch bearbeiten
 
 # Show output of slider selection
-st.sidebar.write("My life satisfaction is around ", chart_language, 'points')
+st.sidebar.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche Länder sind dabei und wir häufig wurde aus ihnen getweetet? Mit dem Land als einzige kategoriale Variable kann ein Donut-Diagramm die Verhältnisse gut darstellen.")
 
 #-------------------
 # HEADER
@@ -67,11 +67,12 @@ st.header("Das ist die interaktive App von der Gruppe D")
 st.subheader("Häufigste Länder")
 st.write("Here's my data:")
 
-source = df2
-
-chart_region = alt.Chart(source).mark_arc(innerRadius=50).encode(
+chart_region = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
     theta=alt.Theta("count(region)", type="quantitative"),
-    color=alt.Color("region", type="nominal")
+    color=alt.Color("region", type="nominal", title='Länder'),
+    tooltip=(
+            alt.Tooltip("region")
+    )
 ).properties(
     title='Anteil der verschiedenen Länder',
     width=400,
@@ -95,11 +96,12 @@ st.altair_chart(c, use_container_width=True)
 st.subheader("Häufigste Sprachen")
 st.write("Here's my data:")
 
-source = df2
-
-chart_language = alt.Chart(source).mark_arc(innerRadius=50).encode(
+chart_language = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
     theta=alt.Theta("count(language)", type="quantitative"),
-    color=alt.Color("language", type="nominal", title='Sprachen')
+    color=alt.Color("language", type="nominal", title='Sprachen'),
+    tooltip=(
+        alt.Tooltip("language")
+    )
 ).properties(
     title='Anteil der verschiedenen Sprachen',
     width=400,
@@ -123,14 +125,12 @@ st.altair_chart(c, use_container_width=True)
 st.subheader("Followerverteilung")
 st.write("Here's my data:")
 
-source = df2
-
-chart_followers = alt.Chart(source).mark_bar().encode(
+chart_followers = alt.Chart(df).mark_bar().encode(
   x=alt.X('author',
     title="Account-Name",
     sort="-y"
   ),
-  y=alt.Y('max(following)',
+  y=alt.Y('max(followers)',
     title="Anzahl Follower"
   ),
   color=alt.Color("author",
@@ -138,7 +138,7 @@ chart_followers = alt.Chart(source).mark_bar().encode(
     title='Account',
     legend=None),
   tooltip=(
-        alt.Tooltip("max(following)", title="Follower")
+        alt.Tooltip("max(followers)", title="Follower")
   )
 ).properties(
     title='Accounts mit den meisten Followern',
@@ -163,13 +163,14 @@ st.altair_chart(c, use_container_width=True)
 st.subheader("Posts je nach Zeit")
 st.write("Here's my data:")
 
-source = df2
+df['date'] = pd.to_datetime(df['publish_date'].dt.date)
 
-chart_time = alt.Chart(source).mark_line().encode(
+
+chart_time = alt.Chart(df).mark_line().encode(
     x=alt.X("date",
         title="Datum"
     ),
-    y=alt.Y("count(date)", #type="integer",
+    y=alt.Y("count(date)",
         title="Anzahl der Tweets"
     ),
     tooltip=(
@@ -187,10 +188,9 @@ chart_time.configure_title(
     color='black',
     anchor='middle'
 )
-c= chart_time
 
 # Show plot
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(chart_time, use_container_width=True)
 
 
 #-------------------
@@ -198,9 +198,13 @@ st.altair_chart(c, use_container_width=True)
 st.subheader("Tweets nach Wochentag und Uhrzeit")
 st.write("Here's my data:")
 
-source = df2
+df['hour'] = df['publish_date'].dt.hour
+df['weekday'] = df['publish_date'].dt.weekday
 
-heatmap = alt.Chart(df2).mark_rect().encode(
+weekday_names = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+df['weekday_name'] = df['weekday'].replace(range(7), weekday_names)
+
+heatmap = alt.Chart(df).mark_rect().encode(
     x=alt.X("hour",
         title="Uhrzeit"
     ),
