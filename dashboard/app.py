@@ -201,7 +201,7 @@ st.write("Dazu benötigen wir drei Werte: Den Wochentag, die Uhrzeit (Einheit: S
 st.write("Die Anzahl der Tweets und die Uhrzeit sind numerische Variablen, der Wochentag ist jedoch eine kategoriale Variable.")
 st.write("Diese Kombination stellen wir in einer Heatmap dar.")
 
-region_select = alt.binding_select(options=df["region"].dropna().unique())
+region_select = alt.binding_select(options=["Alle"] + df["region"].dropna().unique().tolist())
 region_select_widget = alt.selection_single(bind=region_select, name="Region")
 
 heatmap = alt.Chart(df).mark_rect().encode(
