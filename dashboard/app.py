@@ -14,26 +14,29 @@ from datetime import datetime
 # DATA
 
 # Data import
-#df = pd.read_csv('C:\Users\User\Documents\Studium\Medienmanagement\HdM Stuttgart\Semester 4\BigData\data.csv')
-#df = pd.read_csv('../data/external/data2.csv')
-#df = pd.read_csv('C:/Users/User/Documents/GitHub/homework-1/data/external/data.csv')
-#df = pd.read_csv('C:\Users\User\Downloads\homework-1-main\homework-1-main\data\external\data.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data2.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data3.csv')
-df = pd.read_csv('../data/external/data2.csv')
-df2 = df
+df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data2.csv')
 
 
 # Data transformation
+
+#Löschen nicht benötigter Spalten
 df.drop(df.columns[[0, 1, 2, 3, 5, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]], axis=1, inplace=True)
+
+#Spalte "publish_date" in das "datetime"-Format umwandeln
 df['publish_date'] = pd.to_datetime(df['publish_date'], format='%m/%d/%Y %H:%M')
-#-----------
-#df2["length"] = df2["content"].str.len()
-#----------
-#df2['publish_date']= pd.to_datetime(df2['publish_date']).dt.date
-#df2['publish_date'] = pd.to_datetime(df2['publish_date'])
-#df2['date'] = pd.to_datetime(df2['publish_date'].dt.date)
+
+#Spalte "date" hinzufügen, die nur das Datum, aber nicht die Uhrzeit enthält
+df['date'] = pd.to_datetime(df['publish_date'].dt.date)
+
+#Spalte "hour" hinzufügen, die nur die Stunde enthält
+df['hour'] = df['publish_date'].dt.hour
+
+#Spalte "weekday" hinzufügen, die den Wochentag enthält
+df['weekday'] = df['publish_date'].dt.weekday
+
+#Spalte "weekday_name" hinzufügen, die den Namen des Wochentags enthält
+weekday_names = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+df['weekday_name'] = df['weekday'].replace(range(7), weekday_names)
 
 #-------------------
 # START OF APP
@@ -72,9 +75,7 @@ st.write("Mit dem Land als einzige kategoriale Variable kann ein Donut-Diagramm 
 chart_region = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
     theta=alt.Theta("count(region)", type="quantitative"),
     color=alt.Color("region", type="nominal", title='Länder'),
-    tooltip=(
-            alt.Tooltip("region")
-    )
+    tooltip=(alt.Tooltip("region"))
 ).properties(
     title='Anteil der verschiedenen Länder',
     width=400,
@@ -87,10 +88,9 @@ chart_region.configure_title(
     color='black',
     anchor='middle'
 )
-c = chart_region
 
 # Show plot
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(chart_region, use_container_width=True)
 
 
 #-------------------
@@ -102,9 +102,7 @@ st.write("Hier ist die einzige kategoriale Variable die Sprache. Erneut haben wi
 chart_language = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
     theta=alt.Theta("count(language)", type="quantitative"),
     color=alt.Color("language", type="nominal", title='Sprachen'),
-    tooltip=(
-        alt.Tooltip("language")
-    )
+    tooltip=(alt.Tooltip("language"))
 ).properties(
     title='Anteil der verschiedenen Sprachen',
     width=400,
@@ -117,10 +115,9 @@ chart_language.configure_title(
     color='black',
     anchor='middle'
 )
-c= chart_language
 
 # Show plot
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(chart_language, use_container_width=True)
 
 
 #-------------------
@@ -142,9 +139,7 @@ chart_followers = alt.Chart(df).mark_bar().encode(
     type="nominal",
     title='Account',
     legend=None),
-  tooltip=(
-        alt.Tooltip("max(followers)", title="Follower")
-  )
+  tooltip=(alt.Tooltip("max(followers)", title="Follower"))
 ).properties(
     title='Accounts mit den meisten Followern',
     width=800,
@@ -157,10 +152,9 @@ chart_followers.configure_title(
     color='black',
     anchor='middle'
 )
-c= chart_followers
 
 # Show plot
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(chart_followers, use_container_width=True)
 
 
 #-------------------
@@ -171,19 +165,17 @@ st.write("Diese Frage lässt sich mit der Anzahl der Tweets pro Tag erkennen.")
 st.write("Beim Datum und der Anzahl der Tweets pro Tag handelt sich um zwei numerische Variablen.")
 st.write("Diese Auswertung veranschaulichen wir im Folgenden als Liniendiagramm.")
 
-df['date'] = pd.to_datetime(df['publish_date'].dt.date)
+date_range_select = alt.selection_interval(name="Date Range")
 
-
-chart_time = alt.Chart(df).mark_line().encode(
-    x=alt.X("date",
-        title="Datum"
-    ),
-    y=alt.Y("count(date)",
-        title="Anzahl der Tweets"
-    ),
-    tooltip=(
-        alt.Tooltip("count(date)", title="Anzahl der Tweets")
-    )
+chart_time = alt.Chart(df.dropna()).mark_line().encode(
+    x=alt.X("date", title="Datum"),
+    y=alt.Y("count(date)", title="Anzahl der Tweets"),
+    color=alt.Color("region", title="Region"),
+    tooltip=alt.Tooltip("count(date)", title="Anzahl der Tweets")
+).add_selection(
+    date_range_select
+).transform_filter(
+    date_range_select
 ).properties(
     title='Anzahl der Tweets pro Tag',
     width=800,
@@ -209,12 +201,6 @@ st.write("Dazu benötigen wir drei Werte: Den Wochentag, die Uhrzeit (Einheit: S
 st.write("Die Anzahl der Tweets und die Uhrzeit sind numerische Variablen, der Wochentag ist jedoch eine kategoriale Variable.")
 st.write("Diese Kombination stellen wir in einer Heatmap dar.")
 
-df['hour'] = df['publish_date'].dt.hour
-df['weekday'] = df['publish_date'].dt.weekday
-
-weekday_names = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
-df['weekday_name'] = df['weekday'].replace(range(7), weekday_names)
-
 heatmap = alt.Chart(df).mark_rect().encode(
     x=alt.X("hour",
         title="Uhrzeit"
@@ -226,9 +212,7 @@ heatmap = alt.Chart(df).mark_rect().encode(
            ),
     color=alt.Color("count(weekday_name)",
     legend=None),
-    tooltip=(
-        alt.Tooltip("count(weekday_name)", title="Anzahl der Tweets")
-    )
+    tooltip=(alt.Tooltip("count(weekday_name)", title="Anzahl der Tweets"))
 ).properties(
     title='Tweets nach Wochentag und Uhrzeit',
     width=1000,
@@ -241,8 +225,7 @@ heatmap.configure_title(
     color='black',
     anchor='middle'
 )
-c= heatmap
 
 # Show plot
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(heatmap, use_container_width=True)
 
