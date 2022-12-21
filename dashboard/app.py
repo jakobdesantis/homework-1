@@ -200,9 +200,6 @@ st.write("Die Anzahl der Tweets und die Uhrzeit sind numerische Variablen, der W
 st.write("Diese Kombination stellen wir in einer Heatmap dar.")
 st.write("Dafür werden zuerst zwei weitere Spalten „hour“ und „weekday“ erstellt.")
 
-region_select = alt.binding_select(options=df["region"].dropna().unique())
-region_select_widget = alt.selection_single(bind=region_select, name="Region")
-
 heatmap = alt.Chart(df.dropna()).mark_rect().encode(
     x=alt.X("hour",
         title="Uhrzeit"
