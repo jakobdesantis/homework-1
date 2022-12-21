@@ -14,15 +14,7 @@ from datetime import datetime
 # DATA
 
 # Data import
-#df = pd.read_csv('C:\Users\User\Documents\Studium\Medienmanagement\HdM Stuttgart\Semester 4\BigData\data.csv')
-#df = pd.read_csv('../data/external/data2.csv')
-#df = pd.read_csv('C:/Users/User/Documents/GitHub/homework-1/data/external/data.csv')
-#df = pd.read_csv('C:\Users\User\Downloads\homework-1-main\homework-1-main\data\external\data.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data2.csv')
-#df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data3.csv')
 df = pd.read_csv('../data/external/data2.csv')
-#df2 = df
 
 
 # Data transformation
