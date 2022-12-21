@@ -22,7 +22,7 @@ from datetime import datetime
 #df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data2.csv')
 #df = pd.read_csv('https://raw.githubusercontent.com/jakobdesantis/homework-1/main/data/external/data3.csv')
 df = pd.read_csv('../data/external/data2.csv')
-df2 = df
+#df2 = df
 
 
 # Data transformation
@@ -53,23 +53,22 @@ df['weekday_name'] = df['weekday'].replace(range(7), weekday_names)
 # SIDEBAR
 
 # Header
-st.sidebar.header("Hier sehen Sie unsere Sidebar")
+st.sidebar.header("Ihre Erfahrung mit Troll-Tweets")
 
 # Make a sidebar
-Individuelle Befragung = st.sidebar.multiselect('Wurden Sie schon mit einem russischen Troll-Tweet konfrontiert?', Ja, Nein)
-#Individuelle Befragung zu Troll-Tweets = st.sidebar.multiselect('Wie oft wurden Sie schon mit einem russischen Troll-Tweet konfronitiert? Geben Sie Ihre Antwort auf einer Skala von 1 bis 10 an, wobei 0 für keine Konfrontation und 10 für eine sehr hohe Konfrontation steht.', 0, 10, 1)
-#chart_region = st.sidebar.multiselect('Select region', df['region'].unique().tolist())
+chart_followers = st.sidebar.multiselect('Welche dieser Accounts kennen Sie bereits?:', df['author'].unique().tolist())
 
 # Show output of slider selection
-#st.sidebar.write("buhbh")
+st.sidebar.write("Von den Troll-Tweet-Accounts, mit den meisten Follower, kenne ich", chart_followers)
 
 #-------------------
 # HEADER
+st.write("Gruppe D")
 
 # Title of our app
-st.title("Auswertung von russischen Troll-Tweets")
+st.title("Auswertung russischer Troll-Tweets")
 # Add header
-st.header("Das ist die interaktive App von der Gruppe D")
+st.write("Unsere interaktive App wertet russische Troll-Tweets, nach Länder, Sprachen, Follower, Datum und Region sowie Wochentag und Uhrzeit, aus.")
 st.write("Der Datensatz enthält knapp 3 Millionen russische Troll-Tweets, die zwischen Februar 2012 und Mai 2018 veröffentlicht wurden. Da der ursprüngliche Datensatz sehr umfangreich ist, wird im Folgenden nur ein Ausschnitt von knapp 5.000 Tweets analysiert.")
 
 #-------------------
@@ -78,7 +77,8 @@ st.write("Der Datensatz enthält knapp 3 Millionen russische Troll-Tweets, die z
 #-------------------
 # Häufigste Länder
 st.subheader("Länder mit den meist gesendeten Tweets")
-st.write("Die Tweets wurden aus verschiedenen Ländern gesendet. Welche Länder sind dabei und wie häufig wurde aus ihnen getweetet?")
+st.write("Die Tweets wurden aus verschiedenen Ländern gesendet.")
+st.write("Welche Länder sind dabei und wie häufig wurde aus ihnen getweetet?")
 st.write("Mit dem Land als einzige kategoriale Variable kann ein Donut-Diagramm die Verhältnisse gut darstellen.")
 
 chart_region = alt.Chart(df.dropna()).mark_arc(innerRadius=50).encode(
@@ -150,7 +150,7 @@ chart_followers = alt.Chart(df).mark_bar().encode(
     legend=None),
   tooltip=(alt.Tooltip("max(followers)", title="Follower"))
 ).properties(
-    title='Accounts mit den meisten Followern',
+    title='Accounts mit den meisten Follower',
     width=800,
     height=300,
 )
@@ -206,7 +206,7 @@ st.write("Zu welchen Wochentagen und Uhrzeiten waren die Konten besonders aktiv?
 st.write("Dazu benötigen wir drei Werte: Den Wochentag, die Uhrzeit (Einheit: Stunde) und die Anzahl der Tweets pro Wochentag und Uhrzeit.")
 st.write("Die Anzahl der Tweets und die Uhrzeit sind numerische Variablen, der Wochentag ist jedoch eine kategoriale Variable.")
 st.write("Diese Kombination stellen wir in einer Heatmap dar.")
-st.write("Dafür werden zuerst zwei weitere Spalten „hour“ und „weekday“ erstellt."
+st.write("Dafür werden zuerst zwei weitere Spalten „hour“ und „weekday“ erstellt.")
 
 region_select = alt.binding_select(options=df["region"].dropna().unique())
 region_select_widget = alt.selection_single(bind=region_select, name="Region")
