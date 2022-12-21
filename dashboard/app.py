@@ -59,7 +59,7 @@ st.sidebar.header("Ihre Erfahrung mit Troll-Tweets")
 chart_followers = st.sidebar.multiselect('Welche dieser Accounts kennen Sie bereits?:', df['author'].unique().tolist())
 
 # Show output of slider selection
-st.sidebar.write("Von den Troll-Tweet-Accounts, mit den meisten Follower, kenne ich", chart_followers)
+st.sidebar.write("Von den Troll-Tweet-Accounts, mit den meisten Follower, kenne ich:", chart_followers)
 
 #-------------------
 # HEADER
