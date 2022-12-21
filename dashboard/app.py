@@ -215,10 +215,6 @@ heatmap = alt.Chart(df.dropna()).mark_rect().encode(
     color=alt.Color("count(weekday_name)",
     legend=None),
     tooltip = alt.Tooltip("count(weekday_name)", title="Anzahl der Tweets")
-).add_selection(
-    region_select_widget
-).transform_filter(
-    region_select_widget
 ).properties(
     title='Tweets nach Wochentag und Uhrzeit',
     width=1000,
